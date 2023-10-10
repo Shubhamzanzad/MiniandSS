@@ -1,0 +1,3 @@
+strace mknod mknod_fifo_cmd p
+strace mkfifo mkfifo_fifo_cmd
+

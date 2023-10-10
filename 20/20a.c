@@ -1,18 +1,18 @@
 #include<stdio.h>
-#include<sys/ipc.h>
-#include<string.h>
-#include<sys/msg.h>
-int main() {
-    struct msg {
-        long int m_type;
-        char message[80];
-    } myq;
-    int key = ftok(".", 'a');
-    int mqid = msgget(key, 0);
-    printf("Enter message type: ");
-    scanf("%ld", &myq.m_type);
-    printf("Enter message text:");
-    scanf("%[^\n]", myq.message);
-    // size + 1 to accommodate terminating character
-    msgsnd(mqid, &myq,strlen(myq.message) + 1, 0);
+#include<unistd.h>
+#include<stdlib.h>
+#include<sys/types.h>
+#include<sys/stat.h>
+#include<fcntl.h>
+int main(){
+  char buff[50];
+  int fd = open("FIFO1", O_WRONLY);
+  printf("Enter a msg: ");
+  scanf("%[^\n]", buff);
+  if(write(fd, buff, sizeof(buff)) == -1) {
+    printf("FIFO error\n");
+    return 1;
+  }
+  printf("msg wriiten\n");
+return 0;
 }
