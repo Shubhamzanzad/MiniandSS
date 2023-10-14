@@ -54,7 +54,7 @@ void* writeToSharedMemory(void* arg) {
 void* accessResource(void* arg) {
     int threadID = *((int*)arg);
 
-    // Wait for access to a resource
+    // Wait for access to a resource6789
     sem_wait(&resourceSemaphore);
 
     // Access the resource
