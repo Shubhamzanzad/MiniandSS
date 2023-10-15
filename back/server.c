@@ -47,13 +47,13 @@ void start(int desc) {
                 admin_login_handler(desc);
                 break;
             case 2:
-                //prof_login_handler(desc);
+                stud_login_handler(desc);
                 break;
             case 3:
-                //stud_login_handler(desc);
+                prof_login_handler(desc);
                 break;
             default:
-                // Exit
+                _exit(0);
                 break;
             }
         }

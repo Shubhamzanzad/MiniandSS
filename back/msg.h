@@ -34,19 +34,19 @@
 #define INVALID_PASSWORD "Password is invalid\n"
 #define INVALID_LOGIN "Login id is invalid\n"
 
-#define ADMIN_MENU "Admin Menu\n1. Add Student\n2. View Student Details\n3. Modify Student Details\n4. Deactivate Student\n5. Activate Student\n6. Add Faculty\6. Logout and Exit\nEnter your Choice: "
+#define ADMIN_MENU "Admin Menu\n1. Add Student\n2. View Student Details\n3. Modify Student Details\n4. Deactivate or Activate Student\n5. Add Faculty\n6. Logout and Exit\nEnter your Choice: "
 #define ADMIN_PASSWORD "root"
 #define DEFAULT_PASSWORD "default"
 
-#define ASK_CREDENTIALS "Enter your credentials to enter the portal.\n"
+#define ASK_CREDENTIALS "Enter your credentials to enter the portal.\n" 
 #define ASK_LOGIN "Enter your login id: "
 #define ASK_PASSWORD "Enter your password: "
 #define ASK_NAME "Enter your name: "
 #define ASK_ID "Enter student id: "
 #define LOGOUT_MSG "You have been logged out.\n"
-#define ASK_AGE "Enter your age"
-#define ASK_EMAIL "Enter your email"
-#define ASK_ADDRESS "Enter your address"
+#define ASK_AGE "Enter your age: "
+#define ASK_EMAIL "Enter your email: "
+#define ASK_ADDRESS "Enter your address: "
 
 #define ASK_COURSE_ID "Enter course id: "
 #define ASK_COURSE_NAME "Enter course name: "
@@ -54,3 +54,6 @@
 #define ASK_NEW_PASSWORD "Enter new password: "
 
 #define ADMIN_LOGIN_ID "admin"
+
+#define PROF_MENU "Professor Menu\n1.View Offering course\n2. Add new course\n3. Remove Course from catalog\n4. Update course details\n5. Change password\n Enter your Choice"
+#define STUD_MENU "Student Menu\n1. View all courses\n2. Enroll new course\n3. Drop course\n4. View Enrolled Course\n5. Change Password\n6. Logout and exit\n Enter your choice"

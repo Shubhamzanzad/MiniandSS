@@ -24,12 +24,25 @@ void handler(int client_sd) {
             perror("READ ERROR");
         }
         else if (read_size == 0) {
-            printf("No data from server,, closing the connection now");
+            printf("No data from server, closing the connection now");
+        }
+        else if (strchr(read_buff, '^') != NULL)
+        {
+            // Skip read from client
+            strncpy(temp_buff, read_buff, strlen(read_buff) - 1);
+            printf("%s\n", temp_buff);
+            write_size = write(client_sd, "^", strlen("^"));
+            if (write_size == -1)
+            {
+                perror("Error while writing to client socket!");
+                break;
+            }
         }
         else if(strchr (read_buff, '$') != NULL) {
             strncpy(temp_buff, read_buff, strlen(read_buff) - 2);
             printf("%s\n", temp_buff);
             printf("Closing the connection");
+            break;
         }
         else {
             bzero(write_buff, 1024);

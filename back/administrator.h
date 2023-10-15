@@ -24,10 +24,6 @@ void add_new_student(int desc){
     struct stud new_student, last_student;
     
     int stud_file_fd = open("./stud_file", O_RDWR);
-    if(stud_file_fd == -1) {
-        perror("CANNOT OPEN STUDENT FILE");
-        _exit(0);
-    }
     if(stud_file_fd == -1 && errno == ENOENT) {
         new_student.stud_id = 1;
     }
@@ -61,7 +57,6 @@ void add_new_student(int desc){
         new_student.stud_id = last_student.stud_id + 1;
     }
 
-    bzero(write_buff, 1024);
     bzero(read_buff, 1024);
     write_size = write(desc, ASK_NAME, sizeof(ASK_NAME));
     if(write_size == -1) {
@@ -77,7 +72,6 @@ void add_new_student(int desc){
 
     strcpy(new_student.stud_name, read_buff);
 
-    bzero(write_buff, 1024);
     bzero(read_buff, 1024);
 
     write_size = write(desc, ASK_AGE, sizeof(ASK_AGE));
@@ -92,14 +86,28 @@ void add_new_student(int desc){
     }
     new_student.stud_age = atoi(read_buff);
 
-    bzero(write_buff, 1024);
     bzero(read_buff, 1024);
+
+    write_size = write(desc, ASK_ADDRESS, sizeof(ASK_ADDRESS));
+    // if(write_size = -1) {
+    //     perror("COULDN'T ASK ADDRESS OF STUDENT");
+    //     _exit(0);
+    // }
+    read_size = read(desc, read_buff, sizeof(read_buff));
+    if(read_size == -1) {
+        perror("COULDN'T READ ADDRESS OF STUDENT");
+        _exit(0);
+    }
+
+    bzero(read_buff, 1024);
+    strcpy(new_student.stud_address, read_buff);
 
     write_size = write(desc, ASK_EMAIL, sizeof(ASK_EMAIL));
     if(write_size == -1) {
         perror("COULDN'T ASK EMAIL");
         _exit(0);
     }
+
     read_size = read(desc, read_buff, sizeof(read_buff));
     if(read_size == -1) {
         perror("COULDN'T READ THE EMAIL");
@@ -108,21 +116,6 @@ void add_new_student(int desc){
 
     strcpy(new_student.stud_email, read_buff);
 
-    bzero(write_buff, 1024);
-    bzero(read_buff, 1024);
-
-    write_size = write(desc, ASK_ADDRESS, sizeof(ASK_ADDRESS));
-    if(write_size = -1) {
-        perror("COULDN'T ASK ADDRESS OF STUDENT");
-        _exit(0);
-    }
-    read_size = read(desc, read_buff, sizeof(read_buff));
-    if(read_size == -1) {
-        perror("COULDN'T READ ADDRESS OF STUDENT");
-        _exit(0);
-    }
-
-    strcpy(new_student.stud_address, read_buff);
     new_student.flag = 1;
     strcpy(new_student.stud_password, DEFAULT_PASSWORD);
 
@@ -131,23 +124,24 @@ void add_new_student(int desc){
         perror("ERROR OPENING STUDENT FILE");
         _exit(0);
     }
-    bzero(write_buff, sizeof(write_buff));
-    write_size = write(desc, &new_student, sizeof(new_student));
+    
+    write_size = write(stud_file_fd, &new_student, sizeof(new_student));
     if(write_size == -1) {
         perror("COULDN'T WRITE STUDENT DETAILS TO THE FILE");
         _exit(0);
     }
-    write(desc, "Student Added successfully to file.", sizeof("Student Added successfully to file."));
+    write(desc, "Student Added successfully to file.^", sizeof("Student Added successfully to file."));
 
     close(stud_file_fd);
     bzero(write_buff, sizeof(write_buff));
-    sprintf(write_buff, "%s%d\n%s", new_student.stud_name, new_student.stud_id, new_student.stud_password);
+    sprintf(write_buff, "Name of student: %s\n ID: %d\nPassword: %s", new_student.stud_name, new_student.stud_id, new_student.stud_password);
     strcat(write_buff, "^");
     write_size = write(desc, write_buff, sizeof(write_buff));
     if(write_size = -1) {
         perror("ERROR IN SHOWING GENERATED ID");
         _exit(0);
     }
+    bzero(read_buff, sizeof(read_buff));
     read(desc, read_buff, sizeof(read_buff));
     
 }
@@ -166,7 +160,7 @@ void modify_student_details(int desc) {
         _exit(0);
     }
     struct flock lock = {F_WRLCK, SEEK_SET, 0, sizeof(struct stud), getpid()};
-    write_size = write(desc, ASK_ID, sizeof(ASK_EMAIL));
+    write_size = write(desc, ASK_ID, sizeof(ASK_ID));
     if(write_size == -1) {
         perror("COULD NOT ASK FOR STUDENT TO MODIFY DETAILS");
         _exit(0);
@@ -178,7 +172,7 @@ void modify_student_details(int desc) {
     }
 
     int id = atoi(read_buff);
-    int offset = lseek(stud_file_fd, id * sizeof(struct stud), SEEK_SET);
+    off_t offset = lseek(stud_file_fd, (id-1) * sizeof(struct stud), SEEK_SET);
     if(errno == EINVAL) {
         strcpy(write_buff, "STUDENT RECORD DOES NOT EXIST");
         strcat(write_buff, "^");
@@ -199,7 +193,7 @@ void modify_student_details(int desc) {
         perror("ERROR IN LOCKING");
         return;
     }
-    if(student.flag == 1) {
+    // if(student.flag == 1) {
         write_size = write(desc, ASK_NAME, sizeof(ASK_NAME));
         if(write_size == -1) {
             perror("ERROR ASKING FOR NEW NAME");
@@ -258,10 +252,12 @@ void modify_student_details(int desc) {
             perror("ERROR IN WRITING STUDENT DATA IN FILE");
             _exit(0);
         }
-    }
-    else {
-        write(desc, "Student is been deactivated", sizeof("Student is deactivated."));
-    }
+        write(desc, "Changes are written to the file.^", sizeof("Changes are written to the file.^"));
+        
+    // }
+    // else {
+    //     write(desc, "Student is been deactivated.^", sizeof("Student is been deactivated.^"));
+    // }
     read(desc, read_buff, sizeof(read_buff));
 }
 
@@ -272,13 +268,13 @@ void view_student_details(int desc) {
     int stud_file_fd = open("./stud_file", O_RDONLY);
     int id;
 
-    struct flock lock = {F_RDLCK, SEEK_SET, 0, sizeof(struct stud), getpid()};
+    struct flock lock = {F_RDLCK, SEEK_SET, (id-1)*sizeof(struct stud), sizeof(struct stud), getpid()};
 
     bzero(write_buff, sizeof(write_buff));
     bzero(read_buff, sizeof(read_buff));
-    write_size = (desc, ASK_ID, sizeof(ASK_ID));
+    write_size = write(desc, ASK_ID, sizeof(ASK_ID));
     if(write_size == -1) {
-        perror("ERROE ASKING IN STUDENT ID");
+        perror("ERROR ASKING IN STUDENT ID");
         _exit(0);
     }
     read_size = read(desc, read_buff, sizeof(read_buff));
@@ -288,7 +284,7 @@ void view_student_details(int desc) {
     }
     id = atoi(read_buff);
 
-    int offset = lseek(stud_file_fd, id * sizeof(struct stud), SEEK_SET);
+    int offset = lseek(stud_file_fd, (id-1) * sizeof(struct stud), SEEK_SET);
     if(errno == EINVAL) {
         strcpy(write_buff, "STUDENT RECORD DOES NOT EXIST");
         strcat(write_buff, "^");
@@ -296,12 +292,12 @@ void view_student_details(int desc) {
         if(write_size == -1) {
             perror("ERROR IN SENDING ERROR MESSAGE");
         }
-        read_size = read(desc, read_buff, sizeof(read_buff));
+        read_size = read(stud_file_fd, read_buff, sizeof(read_buff));
         return;
     }
     else if(offset == -1) {
         perror("ERROR WHILE ACCESSING STUDENT RECORD");
-        return;
+        return;write(desc,"Student is deactivated", sizeof("Student is deactivated"));
     }
     lock.l_start = offset;
     int locking_status = fcntl(stud_file_fd, F_SETLKW, &lock);
@@ -310,7 +306,7 @@ void view_student_details(int desc) {
         return;
     }
 
-    read_size = read(desc, &student, sizeof(struct stud));
+    read_size = read(stud_file_fd, &student, sizeof(struct stud));
     if(read_size == -1) {
         perror("ERROR IN READING STUDENT RECORD FROM FILE");
         return;
@@ -318,7 +314,7 @@ void view_student_details(int desc) {
 
     lock.l_type = F_UNLCK;
     fcntl(stud_file_fd, F_SETLK, &lock);
-    if(student.flag == 1) {
+    //if(student.flag == 1) {
         bzero(write_buff, sizeof(write_buff));
         sprintf(write_buff,"Student details are as follows\nRoll no.: %d\nName: %s\nAge: %d\nEmail: %s\nAddress: %s\n", student.stud_id, student.stud_name, student.stud_age, student.stud_email, student.stud_address);
         strcat(write_buff, "You will be directed to main page\n^");
@@ -327,14 +323,15 @@ void view_student_details(int desc) {
             perror("ERROR IN GIVING OUT FINAL STUDENT DETAILS");
             return;
         }
-    }
-    else {
-        write(desc, "Student is deactivated.", sizeof("Student is deactivated."));
-    }
+    // }
+    // else {
+    //     write(desc, "Student is deactivated.^", sizeof("Student is deactivated.^"));
+    // }
     close(stud_file_fd);
+    read(desc, read_buff, sizeof(read_buff));
 }
 
-void deactivate(int desc) {
+void deactivate_activate(int desc) {
     ssize_t read_size, write_size;
     char read_buff[1024], write_buff[1024];
     struct stud student;
@@ -358,7 +355,7 @@ void deactivate(int desc) {
         _exit(0);
     }
     int id = atoi(read_buff);
-    int offset = lseek(stud_file_fd, id * sizeof(struct stud), SEEK_SET);
+    int offset = lseek(stud_file_fd, (id-1) * sizeof(struct stud), SEEK_SET);
     
     if(offset == -1) {
         perror("FILE ERROR");
@@ -371,8 +368,20 @@ void deactivate(int desc) {
         _exit(0);
     }
 
-    student.flag = 0;
-    write(desc,"Student is deactivated", sizeof("Student is deactivated"));
+    if(student.flag == 0) {
+        student.flag = 1;
+        write(desc,"Student is been activated.^", sizeof("Student is been activated.^"));    
+    }
+    if(student.flag == 1) {
+        student.flag = 0;
+        write(desc,"Student is been deactivated.^", sizeof("Student is deactivated.^"));
+    }
+    write_size = write(stud_file_fd, &student, sizeof(student));
+    if(write_size == -1) {
+        perror("CANNOT CHANGE THE STUDENT TYPE IN FILE");
+        _exit(0);
+    }
+    //write(desc, "Changes are written to the file.^", sizeof("Changes are written to the file.^"));
 
     lock.l_type = F_UNLCK;
     locking_stat = fcntl(stud_file_fd, F_SETLKW, &lock);
@@ -381,6 +390,7 @@ void deactivate(int desc) {
         return;
     }
     close(stud_file_fd);
+    read(desc, read_buff, sizeof(read_buff));
 }
 
 void activate(int desc) {
@@ -531,18 +541,20 @@ void add_new_professor(int desc) {
 
     strcpy(new_professor.prof_password, DEFAULT_PASSWORD);
 
-    prof_file_fd = open("./stud_file", O_CREAT | O_WRONLY | O_APPEND);
+    prof_file_fd = open("./prof_file", O_WRONLY);
     if(prof_file_fd == -1) {
         perror("ERROR OPENING PROFESSOR FILE");
         _exit(0);
     }
-    bzero(write_buff, sizeof(write_buff));
-    write_size = write(desc, &new_professor, sizeof(new_professor));
+    //bzero(write_buff, sizeof(write_buff));
+    write_size = write(prof_file_fd, &new_professor, sizeof(new_professor));
     if(write_size == -1) {
         perror("COULDN'T WRITE PROFESSOR DETAILS TO THE FILE");
         _exit(0);
     }
     close(prof_file_fd);
+    write(desc, "Changes written to professor file.^", sizeof("Changes written to professor file.^"));
+    read(desc, read_buff, sizeof(read_buff));
 
 }
 
@@ -568,29 +580,30 @@ void admin_login_handler(int desc) {
                 _exit(0);
             }
             int ch = atoi(read_buff);
+            printf("%d", ch);
             switch(ch) {
                 case 1:
                     add_new_student(desc);
                     break;
                 case 2:
-                    modify_student_details(desc);
-                    break;
-                case 3:
                     view_student_details(desc);
                     break;
+                case 3:
+                    modify_student_details(desc);
+                    break;
                 case 4:
-                    deactivate(desc);
+                    deactivate_activate(desc);
                     break;
+                // case 5:
+                //     activate(desc);
+                //     break;
                 case 5:
-                    activate(desc);
-                    break;
-                case 6:
                     add_new_professor(desc);
                     break;
                 default:
                     write(desc, LOGOUT_MSG, sizeof(LOGOUT_MSG));
-                    _exit(0);
-                    break;
+                    exit(EXIT_SUCCESS);
+
             }
         }
     }
