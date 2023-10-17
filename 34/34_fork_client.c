@@ -1,13 +1,12 @@
 /*
-============================================================================    
-Name : 34_fork_client.c
-Author : Siddharth V. Pillai
-Description : Write a program to create a concurrent server.
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : Write a program to create a concurrent server.
 a. use fork
-b. use pthread_create
-(client program for fork server)
-Date: 9th Oct, 2023.
-============================================================================
+File name : 34_fork_client.c
+Date : 12/10/2023
+==================================================
 */
 
 #include<stdio.h>

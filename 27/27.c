@@ -1,3 +1,14 @@
+/*
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : Write a program to receive messages from the message queue.
+a. with 0 as a flag
+b. with IPC_NOWAIT as a flag
+File name : 27.c
+Date : 12/10/2023
+==================================================
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

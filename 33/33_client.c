@@ -1,3 +1,12 @@
+/*
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : Write a program to communicate between two machines using socket.
+File name : 33_client.c
+Date : 12/10/2023
+==================================================
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

@@ -1,3 +1,16 @@
+/*
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : Write a program to implement semaphore to protect any critical section.
+a. rewrite the ticket number creation program using semaphore
+b. protect shared memory from concurrent write access
+c. protect multiple pseudo resources ( may be two) using counting semaphore
+d. remove the created semaphore
+File name : 31.c
+Date : 12/10/2023
+==================================================
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <semaphore.h>

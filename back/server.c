@@ -3,19 +3,23 @@
 #include<stdbool.h>
 #include<stdio.h>
 #include<unistd.h>
+#include <fcntl.h>
 #include<stdlib.h>
 #include<sys/types.h>
 #include<sys/socket.h>
 #include<string.h>
+#include<errno.h>
+#include<ctype.h>
+#include <sys/stat.h>
 
-// #include "msg.h"
+#include "structs.h"
+#include "msg.h"
+#include"login.h"
+#include "availabilty1.h"
+#include "course.h"
 #include "administrator.h"
-// #include "student.h"
-// #include "professor.h"
-// #include "admin.h"
-// #include "stud.h"
-// #include "prof.h"
-//#include "structs.h"
+#include "professor.h"
+#include "student.h"
 
 void LOG(char *msg) {
     printf("%s\n", msg);

@@ -1,3 +1,12 @@
+/*
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : Write a program to remove the message queue.
+File name : 29.c
+Date : 12/10/2023
+==================================================
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>

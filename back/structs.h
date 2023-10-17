@@ -16,7 +16,7 @@ struct stud {
     char stud_email[50];
     int stud_age;
     char stud_address[50];
-    int flag;
+    bool flag;
     //int courses[10];
     char stud_password[50];
     // struct courses {
@@ -28,5 +28,29 @@ struct stud {
 struct admin {
     int id;
     char admin_password[5];
+};
+
+struct course {
+    int course_id;
+    int prof_id;
+    int seats;
+    int credit;
+    char course_name[50];
+    int available;
+};
+
+struct enroll {
+    int stud_id;
+    int course_id;
+    int prof_id;
+    int enroll_id;
+    int is_enrolled;
+};
+
+struct record {
+    int student;
+    int teacher;
+    int courses;
+    int enrolls;
 };
 

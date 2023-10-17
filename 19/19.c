@@ -1,3 +1,17 @@
+/*
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : Create a FIFO file by
+a. mknod command
+b. mkfifo command
+c. use strace command to find out, which command (mknod or mkfifo) is better.
+c. mknod system call
+d. mkfifo library function
+File name : 19.c
+Date : 12/10/2023
+==================================================
+*/
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>

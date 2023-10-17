@@ -1,3 +1,13 @@
+/*
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : Write a program to create a concurrent server.
+a. use fork
+File name : 32.c
+Date : 12/10/2023
+==================================================
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -13,25 +23,20 @@ int ticketNumber = 0;
 char* sharedMemory;
 sem_t ticketSemaphore, memorySemaphore, resourceSemaphore;
 
-// Function to generate a ticket number
 void* generateTicket(void* arg) {
     int threadID = *((int*)arg);
     int ticket;
-
     // Wait for access to the critical section
     sem_wait(&ticketSemaphore);
-
     // Generate a ticket number
     ticket = ticketNumber++;
     printf("Thread %d generated ticket: %d\n", threadID, ticket);
-
     // Release access to the critical section
     sem_post(&ticketSemaphore);
 
     pthread_exit(NULL);
 }
 
-// Function to write to shared memory
 void* writeToSharedMemory(void* arg) {
     int threadID = *((int*)arg);
     char message[100];
@@ -50,16 +55,12 @@ void* writeToSharedMemory(void* arg) {
     pthread_exit(NULL);
 }
 
-// Function to access pseudo resources
 void* accessResource(void* arg) {
     int threadID = *((int*)arg);
-
     // Wait for access to a resource6789
     sem_wait(&resourceSemaphore);
-
     // Access the resource
     printf("Thread %d is accessing a resource.\n", threadID);
-
     // Release access to the resource
     sem_post(&resourceSemaphore);
 
@@ -74,17 +75,14 @@ int main() {
     sem_init(&memorySemaphore, 0, 1);   // Binary semaphore for shared memory access
     sem_init(&resourceSemaphore, 0, 2); // Counting semaphore for two resources
 
-    // Create threads for different tasks
     pthread_t ticketThreads[numThreads];
     pthread_t memoryThreads[numThreads];
     pthread_t resourceThreads[numThreads];
 
-    // Create shared memory segment
     key_t shmKey = ftok("/tmp", 'S');
     int shmid = shmget(shmKey, 100, IPC_CREAT | 0666);
     sharedMemory = (char*)shmat(shmid, NULL, 0);
 
-    // Create threads and perform tasks
     for (i = 0; i < numThreads; i++) {
         int threadID = i + 1;
         pthread_create(&ticketThreads[i], NULL, generateTicket, &threadID);
@@ -103,7 +101,6 @@ int main() {
     shmdt(sharedMemory);
     shmctl(shmid, IPC_RMID, NULL);
 
-    // Destroy semaphores
     sem_destroy(&ticketSemaphore);
     sem_destroy(&memorySemaphore);
     sem_destroy(&resourceSemaphore);

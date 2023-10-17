@@ -1,3 +1,15 @@
+/*
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : Write a program to execute ls -l | wc.
+a. use dup
+b. use dup2
+c. use fcntl
+File name : 17c.c
+Date : 12/10/2023
+==================================================
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>

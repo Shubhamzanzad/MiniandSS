@@ -1,11 +1,11 @@
 /*
 ============================================================================    
 Name : 34b_serv.c
-Author : Siddharth V. Pillai
+Author : Shubham Zanzad
 Description : Write a program to create a concurrent server.
 b. use pthread_create
 (server program)
-Date: 9th Oct, 2023.
+Date: 12th Oct, 2023.
 ============================================================================
 */
 

@@ -1,3 +1,13 @@
+/*
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : Write a program to print the maximum number of files can be opened within a process and
+size of a pipe (circular buffer).
+File name : 23.c
+Date : 12/10/2023
+==================================================
+*/
 #include <stdio.h>
 #include <unistd.h>
 

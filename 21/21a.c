@@ -1,3 +1,12 @@
+/*
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : rite two programs so that both can communicate by FIFO -Use two way communications.
+File name : 21a.c
+Date : 12/10/2023
+==================================================
+*/
 #include<stdio.h>
 #include<unistd.h>
 #include<stdlib.h>

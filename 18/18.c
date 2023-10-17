@@ -1,3 +1,13 @@
+/*
+===================================================
+Name : Shubham Zanzad
+Roll no. : MT2023040
+Problem Statement : Write a program to find out total number of directories on the pwd.
+execute ls -l | grep ^d | wc ? Use only dup2.
+File name : 18.c
+Date : 12/10/2023
+==================================================
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
